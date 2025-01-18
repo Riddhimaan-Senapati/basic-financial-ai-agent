@@ -1,11 +1,11 @@
 from typing import Union, Dict, Set, List, TypedDict, Annotated
-import pandas as pd
 from langchain_core.tools import tool
+import pandas as pd
 import yfinance as yf
 from ta.momentum import RSIIndicator, StochasticOscillator
 from ta.trend import SMAIndicator, EMAIndicator, MACD
 from ta.volume import volume_weighted_average_price
-
+import datetime as dt
 @tool
 def get_stock_prices(ticker: str) -> Union[Dict, str]:
     """Fetches historical stock price data and technical indicator for a given ticker."""

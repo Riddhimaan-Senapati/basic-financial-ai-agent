@@ -1,11 +1,17 @@
+from dotenv import load_dotenv
+load_dotenv()
+from langchain_groq import ChatGroq
+from stocks import get_stock_prices,get_financial_metrics
+from langgraph.graph import StateGraph, START, END
+from langchain_core.messages import SystemMessage, AIMessage, HumanMessage
+from langchain_core.tools import tool
+from langgraph.prebuilt import ToolNode, tools_condition
+from langgraph.graph.message import add_messages
+from typing import Union, Dict, Set, List, TypedDict, Annotated
 import dotenv
 dotenv.load_dotenv()
 
-from langchain_groq import ChatGroq
-
-from stocks import get_stock_prices,get_financial_metrics
-
-llm = ChatOpenAI(model='mixtral-8x7b-32768')
+llm = ChatGroq(model='mixtral-8x7b-32768')
 
 tools = [get_stock_prices, get_financial_metrics]
 llm_with_tool = llm.bind_tools(tools)
@@ -39,6 +45,12 @@ Respond in the following format:
 "Asked Question Answer": "<Answer based on the details and analysis above>"
 
 Ensure that your response is objective, concise, and actionable."""
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+    stock: str
+    
+graph_builder = StateGraph(State)
 
 def fundamental_analyst(state: State):
     messages = [
