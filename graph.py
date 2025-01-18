@@ -1,11 +1,11 @@
 import dotenv
 dotenv.load_dotenv()
 
-from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
 
 from stocks import get_stock_prices,get_financial_metrics
 
-llm = ChatOpenAI(model='gpt-4o-mini')
+llm = ChatOpenAI(model='mixtral-8x7b-32768')
 
 tools = [get_stock_prices, get_financial_metrics]
 llm_with_tool = llm.bind_tools(tools)
